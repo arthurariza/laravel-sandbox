@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Feature;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,4 +25,13 @@ Route::get('/blade', function () {
 
 Route::get('/script', function () {
     return view('script');
+});
+
+Route::get('/dashboard', function () {
+    $features = Feature::query()
+                       ->select(['id', 'name', 'status', 'created_at'])
+                       ->latest()
+                       ->paginate(15);
+
+    return View::make('dashboard', compact('features'));
 });
